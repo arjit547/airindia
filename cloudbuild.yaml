@@ -13,7 +13,7 @@ steps:
     args:
       - '-c'
       - |
-        gcloud compute url-maps invalidate-cache $_URL_MAP_NAME --path "/*" --async
+        gcloud compute url-maps cache-invalidation create --url-map=$_URL_MAP_NAME --path "/*" --async
 
 substitutions:
   _BUCKET_NAME: 'cicdbucketnew'
