@@ -1,13 +1,40 @@
+# steps:
+#   # Sync only the index.html file to the bucket
+#   - name: 'gcr.io/cloud-builders/gsutil'
+#     args: ['cp', 'index.html', 'gs://$_BUCKET_NAME']
+
+#   # Verify that index.html is updated in the bucket
+#   - name: 'gcr.io/cloud-builders/gsutil'
+#     args: ['ls', 'gs://$_BUCKET_NAME']
+
+#   # Invalidate the CDN cache
+#   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
+#     entrypoint: 'bash'
+#     args:
+#       - '-c'
+#       - |
+#         gcloud compute url-maps invalidate-cdn-cache $_URL_MAP_NAME --path "/" --async || echo "Cache invalidation failed."
+
+# substitutions:
+#   _BUCKET_NAME: 'cicdbucketnew'
+#   _URL_MAP_NAME: 'cicdlbfrontend'
+
+# options:
+#   logging: CLOUD_LOGGING_ONLY
+#   substitution_option: 'ALLOW_LOOSE'
+
+
+
 steps:
   # Sync only the index.html file to the bucket
   - name: 'gcr.io/cloud-builders/gsutil'
     args: ['cp', 'index.html', 'gs://$_BUCKET_NAME']
 
-  # Verify that index.html is updated in the bucket
+  # Force immediate cache purge using gsutil
   - name: 'gcr.io/cloud-builders/gsutil'
-    args: ['ls', 'gs://$_BUCKET_NAME']
+    args: ['setmeta', '-h', 'Cache-Control:no-cache, max-age=0', 'gs://$_BUCKET_NAME/index.html']
 
-  # Invalidate the CDN cache
+  # Invalidate the CDN cache immediately
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
     entrypoint: 'bash'
     args:
