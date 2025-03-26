@@ -1,9 +1,13 @@
 steps:
-  # Upload index.html to Google Cloud Storage
+  # Sync all files to the bucket
   - name: 'gcr.io/cloud-builders/gsutil'
-    args: ['cp', 'index.html', 'gs://$_BUCKET_NAME/index.html']
+    args: ['rsync', '-r', '.', 'gs://$_BUCKET_NAME']
 
-  # Invalidate the entire Cloud CDN cache
+  # Verify the files in the bucket (for debugging)
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['ls', 'gs://$_BUCKET_NAME']
+
+  # Invalidate the cache
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     args:
       - 'compute'
@@ -15,8 +19,8 @@ steps:
       - '--async'
 
 substitutions:
-  _BUCKET_NAME: 'cicdbucketnew'       # Your Cloud Storage bucket name
-  _URL_MAP_NAME: 'cicdlbfrontend'     # Your URL map name
+  _BUCKET_NAME: 'cicdbucketnew'
+  _URL_MAP_NAME: 'cicdlbfrontend'
 
 options:
   logging: CLOUD_LOGGING_ONLY
