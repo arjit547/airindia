@@ -1,0 +1,22 @@
+steps:
+  # Upload index.html to Google Cloud Storage
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['cp', 'index.html', 'gs://$_BUCKET_NAME/index.html']
+
+  # Invalidate the entire Cloud CDN cache
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    args:
+      - 'compute'
+      - 'url-maps'
+      - 'invalidate-cache'
+      - '$_URL_MAP_NAME'
+      - '--path'
+      - '/*'
+      - '--async'
+
+substitutions:
+  _BUCKET_NAME: 'cicdbucketnew'       # Your Cloud Storage bucket name
+  _URL_MAP_NAME: 'cicdlbfrontend'     # Your URL map name
+
+options:
+  logging: CLOUD_LOGGING_ONLY
