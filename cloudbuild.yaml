@@ -1,23 +1,16 @@
 steps:
-  # Sync only the index.html file to the bucket
+  # Upload index.html to the GCS bucket
   - name: 'gcr.io/cloud-builders/gsutil'
-    args: ['cp', 'index.html', 'gs://$_BUCKET_NAME']
+    args: ['cp', 'index.html', 'gs://cicdbucketnew']
 
-  # Verify that index.html is updated in the bucket
+  # List bucket contents for verification
   - name: 'gcr.io/cloud-builders/gsutil'
-    args: ['ls', 'gs://$_BUCKET_NAME']
+    args: ['ls', 'gs://cicdbucketnew']
 
-  # Invalidate the CDN cache
+  # Invalidate CDN cache for the load balancer
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
-    entrypoint: 'bash'
+    entrypoint: bash
     args:
       - '-c'
       - |
-        gcloud compute url-maps invalidate-cache $_URL_MAP_NAME --path "/*" --async
-
-substitutions:
-  _BUCKET_NAME: 'cicdbucketnew'
-  _URL_MAP_NAME: 'cicdlbfrontend'
-
-options:
-  logging: CLOUD_LOGGING_ONLY
+        gcloud compute url-maps invalidate-cdn-cache cicdlbfrontend --path "/*" --async
