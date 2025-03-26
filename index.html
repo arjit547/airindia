@@ -4,75 +4,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Our Website</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Modern Landing Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #4e54c8, #8f94fb);
-            color: white;
-            overflow-x: hidden;
+            font-family: 'Roboto', sans-serif;
+            background: #1e1e2f;
+            color: #ffffff;
             text-align: center;
+            box-sizing: border-box;
         }
 
-        header {
-            padding: 2rem;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 2rem;
+        .hero {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
         }
 
         h1 {
-            font-size: 3rem;
-            margin: 0;
+            font-size: 4rem;
+            margin: 0 0 20px;
+            background: linear-gradient(90deg, #ff8a00, #e52e71);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         p {
             font-size: 1.2rem;
-            line-height: 1.8;
+            margin: 20px 0;
+            max-width: 800px;
         }
 
         .btn {
             display: inline-block;
             margin-top: 2rem;
-            padding: 1rem 2rem;
+            padding: 1rem 2.5rem;
             font-size: 1rem;
             color: white;
             text-decoration: none;
-            border-radius: 50px;
-            background: #ff7eb3;
-            transition: background 0.3s;
+            border-radius: 8px;
+            background: linear-gradient(45deg, #4e54c8, #8f94fb);
+            transition: transform 0.3s ease;
         }
 
         .btn:hover {
-            background: #ff4d94;
+            transform: translateY(-5px);
         }
 
         footer {
-            margin-top: 3rem;
-            padding: 1rem;
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
             font-size: 0.9rem;
         }
     </style>
 </head>
 
 <body>
-    <header>
-        <h1>Welcome to Our Website</h1>
-    </header>
-
-    <div class="container">
-        <p>Discover amazing content and explore new ideas. We are here to deliver the best experience for you.</p>
-        <a href="#" class="btn">Get Started</a>
+    <div class="hero">
+        <h1>Explore the Future</h1>
+        <p>Join us on a journey to innovate, inspire, and lead the world into tomorrow. We bring cutting-edge technology right to your fingertips.</p>
+        <a href="#" class="btn">Learn More</a>
     </div>
 
     <footer>
-        &copy; 2025 Your Company. All rights reserved.
+        &copy; 2025 Your Company. All Rights Reserved.
     </footer>
 </body>
 
