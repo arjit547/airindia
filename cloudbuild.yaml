@@ -1,13 +1,13 @@
 steps:
-  # Sync all files to the bucket
+  # Upload only the updated index.html to the bucket
   - name: 'gcr.io/cloud-builders/gsutil'
-    args: ['rsync', '-r', '.', 'gs://$_BUCKET_NAME']
+    args: ['cp', 'index.html', 'gs://$_BUCKET_NAME/index.html']
 
-  # Verify the files in the bucket (for debugging)
+  # Verify the updated index.html in the bucket (for debugging)
   - name: 'gcr.io/cloud-builders/gsutil'
-    args: ['ls', 'gs://$_BUCKET_NAME']
+    args: ['ls', 'gs://$_BUCKET_NAME/index.html']
 
-  # Invalidate the cache
+  # Invalidate the cache for index.html
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     args:
       - 'compute'
@@ -15,7 +15,7 @@ steps:
       - 'invalidate-cache'
       - '$_URL_MAP_NAME'
       - '--path'
-      - '/*'
+      - '/index.html'
       - '--async'
 
 substitutions:
