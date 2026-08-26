@@ -7,7 +7,7 @@ resources:
 variables:
   dockerRegistryServiceConnection: '5f17aea6-2582-4678-a83e-adc8c8288f2f'
 
-  imageRepository: 'node'
+  imageRepository: 'arjitairindia'
 
   containerRegistry: 'staticacr.azurecr.io'
 
@@ -17,11 +17,13 @@ variables:
 
   vmImageName: 'ubuntu-latest'
 
-  azureSubscription: 'b27510e1-140b-4f1d-ab9f-5f5f698b33d6'
+  # Azure DevOps Service Connection NAME
+  azureSubscription: 'azure-vcheck-deploy'
 
   containerAppName: 'vcheck'
 
   resourceGroup: 'Arjit'
+
 
 stages:
 
@@ -78,7 +80,7 @@ stages:
     steps:
 
     - task: AzureContainerApps@1
-      displayName: Deploy image to Container App
+      displayName: Deploy image to vcheck
 
       inputs:
         azureSubscription: $(azureSubscription)
