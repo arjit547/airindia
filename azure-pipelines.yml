@@ -5,38 +5,46 @@ resources:
 - repo: self
 
 variables:
+
+  # Existing Docker Registry service connection
   dockerRegistryServiceConnection: '5f17aea6-2582-4678-a83e-adc8c8288f2f'
 
-  imageRepository: 'arjitairindia'
+  # ACR repository
+  imageRepository: 'node'
 
+  # ACR
   containerRegistry: 'staticacr.azurecr.io'
 
+  # Dockerfile
   dockerfilePath: '$(Build.SourcesDirectory)/service1/Dockerfile'
 
+  # Unique image version
   tag: '$(Build.BuildId)'
 
+  # Azure DevOps agent
   vmImageName: 'ubuntu-latest'
 
-  # Azure DevOps Service Connection NAME
-  azureSubscription: 'azure-vcheck-deploy'
+  # NEW Azure Resource Manager service connection
+  azureSubscription: 'test'
 
+  # Container App
   containerAppName: 'vcheck'
 
+  # Resource Group
   resourceGroup: 'Arjit'
 
 
 stages:
 
-# =========================
-# BUILD + PUSH
-# =========================
+# ========================================
+# BUILD + PUSH IMAGE
+# ========================================
 
 - stage: Build
   displayName: Build and Push
 
   jobs:
   - job: Build
-    displayName: Build Docker Image
 
     pool:
       vmImage: $(vmImageName)
@@ -44,35 +52,34 @@ stages:
     steps:
 
     - task: Docker@2
-      displayName: Build and push image to ACR
+      displayName: Build and Push Image to ACR
 
       inputs:
         command: buildAndPush
-
         repository: $(imageRepository)
-
         dockerfile: $(dockerfilePath)
-
         containerRegistry: $(dockerRegistryServiceConnection)
 
-        buildContext: '$(Build.SourcesDirectory)/service1'
+        # IMPORTANT
+        buildContext: '$(Build.SourcesDirectory)'
 
         tags: |
           $(tag)
 
 
-# =========================
-# DEPLOY
-# =========================
+# ========================================
+# DEPLOY TO CONTAINER APP
+# ========================================
 
 - stage: Deploy
   displayName: Deploy to Container App
 
   dependsOn: Build
 
+  condition: succeeded()
+
   jobs:
   - job: Deploy
-    displayName: Deploy Container App
 
     pool:
       vmImage: $(vmImageName)
@@ -80,13 +87,10 @@ stages:
     steps:
 
     - task: AzureContainerApps@1
-      displayName: Deploy image to vcheck
+      displayName: Deploy Image to vcheck
 
       inputs:
         azureSubscription: $(azureSubscription)
-
         containerAppName: $(containerAppName)
-
         resourceGroup: $(resourceGroup)
-
         imageToDeploy: '$(containerRegistry)/$(imageRepository):$(tag)'
